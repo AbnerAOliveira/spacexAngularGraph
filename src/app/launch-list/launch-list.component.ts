@@ -1,4 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { PastLaunchesListGQL } from '../services/spacexGraphql.service';
 
 @Component({
   selector: 'app-launch-list',
@@ -8,7 +10,13 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class LaunchListComponent implements OnInit {
 
-  constructor() { }
+  launches$ = this.launchService.fetch({limit: 30}).pipe(
+    map(res => res.data.launchesPast)
+  )
+
+  constructor(
+    private readonly launchService: PastLaunchesListGQL
+  ) { }
 
   ngOnInit(): void {
   }
